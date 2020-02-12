@@ -237,3 +237,158 @@ finalgrade = ((grade > 90) ? "high pass" : (grade < 60)) ? "fail" : "pass";//注
 //当输入grade>90时，结果将会一直是fail
 ```
 
+### 4.25
+
+机器上int占32位，char占8位，用的的Latin-1字符集，其中'q'的二进制形式是01110001，求表达式'q'<<6的值：
+
+64
+
+### 4.26
+
+如果使用unsigned int作为quiz1的类型会出现什么情况：
+
+位数不够
+
+### 4.27
+
+表达式的结果：
+
+```c++
+unsigned long ul1=3,ul2=7;//0011,0111
+ul1&ul2//0011 3
+ul1|ul2//0111 7
+ul1&&ul2//true
+ul1||ul2//true
+```
+
+### 4.28
+
+编写程序，输出每一种内置类型所占空间的大小
+
+```c++
+int main()
+{
+	std::cout << "bool\t\tis " << sizeof(bool) << "bytes." << std::endl;
+	std::cout << "char\t\tis " << sizeof(char) << "bytes." << std::endl;
+	std::cout << "wchar_t\t\tis " << sizeof(wchar_t) << "bytes." << std::endl;
+	std::cout << "char16_t\tis " << sizeof(char16_t) << "bytes." << std::endl;
+	std::cout << "char32_t\tis " << sizeof(char32_t) << "bytes." << std::endl;
+	std::cout << "short\t\tis " << sizeof(short) << "bytes." << std::endl;
+	std::cout << "int\t\tis " << sizeof(int) << "bytes." << std::endl;
+	std::cout << "long\t\tis " << sizeof(long) << "bytes." << std::endl;
+	std::cout << "long long\tis " << sizeof(long long) << "bytes." << std::endl;
+	std::cout << "float\t\tis " << sizeof(float) << "bytes." << std::endl;
+	std::cout << "double\t\tis " << sizeof(double) << "bytes." << std::endl;
+	std::cout << "long double\tis " << sizeof(long double) << "bytes." << std::endl;
+	std::cout << std::endl;
+}
+```
+
+### 4.29
+
+推断以下代码的输出结果并实际运行
+
+```c++
+int main()
+{
+	int x[10];
+	int *p = x;
+	std::cout << sizeof(x) / sizeof(*x) << std::endl;//10,表示数组元素数目
+	std::cout << sizeof(p) / sizeof(*p) << std::endl;//64位机器时为2，32位机器为1
+	std::cout << sizeof(p) << std::endl;//8
+	std::cout << sizeof(*p) << std::endl;//4
+	std::cout << std::endl;
+}
+```
+
+### 4.30
+
+表达式适当位置加上括号，保持表达式含义不变
+
+```c++
+(sizeof x)+y
+sizeof (p->mem[i])
+(sizeof a)<b
+sizeof f()
+```
+
+### 4.31
+
+如果相使用后置递增递减的话，不需要做其他修改。两个版本的运算符在循环中是一样的，但是在实际使用过程中推荐使用前置版本，因为当使用后置版本时需要开辟额外的内存空间存储元素递增递减前的原值，如果对原值不做操作的话这一步完全可以使用前置版本。
+
+### 4.32
+
+解释循环的意义
+
+ptr和ix最终所起的作用是一样的。可以选择指针ptr作为循环条件，也可以选择ix即下标作为循环条件。
+
+### 4.33
+
+解释表达式含义：
+
+```c++
+somevalue? ++x,++y:--x.--y;
+//以上表达式中逗号的优先级最低，因此可以写成
+(somevalue? ++x,++y:--x).--y;
+//以上表达式的含义时if somevalue==true,then ++y and result->++y->--y,即结果为y,否则then--x,同时result->--y
+//注意逗号运算符的结果是逗号右侧的表达式结果
+```
+
+### 4.34
+
+说明表达式将发生什么样的类型转换
+
+(a) if(fval)  fval从float提升到bool
+
+(b) dval=fval+ival ival提升到fval，相加后结果提升到double
+
+(c) dval+ival*cval cval提升到ival，相乘后结果提升到double与dval相加
+
+### 4.35
+
+指出是否发生隐式类型转换：
+
+```c++
+char cval;
+int ival;
+unsigned int ui;
+float fval;
+double dval;
+cval='a'+3;//'a'提升为int,然后相加后提升为char
+fval=ui-ival*1.0;//ival提升为double,ui提升为double,相减的结果提升为float
+dval=ui*fval;//ui提升为float，相乘后提升为double
+cval=ival+fval+dval;//ival和fval分别提升为double，相加后提升为char
+//注意，当double->float或者double->char时会有数据的损失
+```
+
+### 4.36
+
+假设i是int类型，d是double类型，书写表达式i*=d使其执行整数类型的乘法而非浮点类型的乘法
+
+使用强制类型转换static_cast：i*=static_cast<int>(d)
+
+### 4.37
+
+使用命名的强制类型转换改写下列旧式的转换语句
+
+```c++
+int i;
+double d;
+const string *ps;
+char *pc;
+void *pv;
+pv=(void*)ps;//pv=const_cast<string*>(ps);
+i=int(*pc);//i=static_cast<int>(*pc);
+pv=&d;//pv=static_cast<void*>(&d);
+pc=(char*)pv;//pc=reinterpret_cast<char*>(pv);
+```
+
+### 4.38
+
+表达式含义：
+
+```c++
+double slope=static_cast<double>(j/i);
+//j/i经计算后是int型，通过static_cast<double>将结果强制转换为double型
+```
+
