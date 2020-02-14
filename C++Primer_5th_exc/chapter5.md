@@ -332,3 +332,279 @@ int main()
 }
 ```
 
+### 5.13
+
+(a) 缺少break
+
+(b) ix的定义位置不对
+
+(c) 多条case语句写在一起时格式不对
+
+(d) case语句必须是一个常量表达式
+
+### 5.14
+
+标准输入中读取若干string对象并查找连续重复出现的单词
+
+```c++
+int main()
+{
+	std::cout << "请输入你的字符串：" << std::endl;
+	std::string curStr,preStr="",maxStr="";
+	int curNum = 0,preNum=0,maxNum=0;
+	while (std::cin >> curStr) {
+		if (curStr == preStr) {
+			++curNum;
+		}
+		else {
+			preStr = curStr;
+			curNum = 1;
+		}
+		if (maxNum < curNum) {
+			maxNum = curNum;
+			maxStr = preStr;
+		}
+	}
+	std::cout << "连续出现次数最多的字符串是：" << maxStr << "，出现次数是：" << maxNum << std::endl;
+	return 0;
+}
+```
+
+### 5.15
+
+循环的含义，改正错误
+
+(a) 循环实现ix的递增。ix在for循环中定义，无法在if语句中继续使用。
+
+(b) for循环缺少初始值
+
+(c) sz将会一直增加，ix追不上sz，无限循环
+
+### 5.16
+
+```c++
+// while idiomatic
+int i;
+while ( cin >> i )
+    // ...
+
+// same as for
+for (int i = 0; cin >> i;)
+    // ...
+
+// for idiomatic
+for (int i = 0; i != size; ++i)
+    // ...
+    
+// same as while
+int i = 0;
+while (i != size)
+{
+    // ...
+    ++i;
+}
+```
+
+### 5.17
+
+检验一个vector对象是否是另一个的前缀
+
+```c++
+int main()
+{
+	std::vector<int> ivec1 = { 0,1,1,2 };
+	std::vector<int> ivec2 = { 0,1,1,2,7,8,9 };
+	bool same=true;
+	for (int i = 0; i < ivec1.size(); ++i) {
+		if (ivec1[i] != ivec2[i]) {
+			same = false;
+			break;
+		}
+	}
+	if (same)
+		std::cout << "bingo";
+	else
+		std::cout << "not same";
+	std::cout << std::endl;
+	return 0;
+}
+```
+
+### 5.18
+
+理解以下循环的含义并修改错误
+
+```c++
+do{
+	int v1.v2;
+	//...
+}while(cin);
+
+int val;
+do{
+	//...
+}while(val=get_response());
+
+int ival=get_response();
+do{
+	ival=get_response();
+}while(ival);
+```
+
+### 5.19
+
+编写程序，使用do-while执行：首先提示用户输入两个string对象，然后选出较短的那个输出
+
+```c++
+int main()
+{
+	std::string strFlag;
+	do {
+		std::string str1, str2;
+		std::cout << "please enter two string:" << std::endl;
+		std::cin >> str1 >> str2 ;
+		if (str1.size() < str2.size())
+			std::cout << "较短的字符串为：" << str1 << std::endl;
+		else
+			std::cout << "较短的字符串为：" << str2 << std::endl;
+		std::cout << "if you want to continue? y/n " << std::endl;
+		std::cin >> strFlag;
+	} while (strFlag=="y");
+	std::cout << std::endl;
+	return 0;
+}
+```
+
+### 5.20
+
+编写程序，标准输入读取string对象的序列直到连续出现两个相同的单词或者所有单词都读完为止。
+
+```c++
+int main()
+{
+	std::string str, prestr = "";
+	while (std::cin >> str) {
+        if(!)
+		if (str == prestr) {
+			break;
+		}
+		else
+			prestr = str;
+	}
+	if (std::cin.eof())
+		std::cout << "no same element";
+	else
+		std::cout << "the same element is: " << str;
+	std::cout << std::endl;
+	return 0;
+}
+//注：cin.eof()的作用是判断输入是否结束，当win系统下ctrl+z控制输入结束后，cin.eof()会返回true
+```
+
+### 5.21
+
+修改5.5.1练习题程序，使其找到的重复单词必须以大写字母开头
+
+```c++
+int main()
+{
+	std::string str, prestr = "";
+	while (std::cin >> str) {
+		if (!isupper(str[0])) {
+			prestr = "";
+			continue;
+		}
+		if (str == prestr) {
+			break;
+		}
+		else
+			prestr = str;
+	}
+	if (std::cin.eof())
+		std::cout << "no same element";
+	else
+		std::cout << "the same element is: " << str;
+	std::cout << std::endl;
+	return 0;
+}
+```
+
+### 5.22
+
+for循环代替goto语句
+
+```c++
+//源程序
+begin:
+	int sz=get_size();
+	if(sz<=0){
+		goto begin;
+	}
+//修改
+for(int sz=get_size();sz<=0;sz=get_size())
+	;
+```
+
+### 5.23
+
+编写程序，标准输入两个整数，输出第一个数除以第二个数的结果
+
+```c++
+int main()
+{
+	int num1, num2;
+	std::cin >> num1 >> num2;
+	std::cout << "result is: " << static_cast<double>(num1) / num2;
+	std::cout << std::endl;
+	return 0;
+}
+//static_cast实现强制类型转换
+```
+
+### 5.24
+
+先不使用catch子句，实现除数为0时抛出异常
+
+```c++
+int main()
+{
+	int num1, num2;
+	std::cin >> num1 >> num2;
+	if (num2 == 0) throw std::runtime_error("the second number is zero!!!");
+	std::cout << "result is: " << static_cast<double>(num1) / num2;
+	std::cout << std::endl;
+	return 0;
+}
+```
+
+### 5.25
+
+try语句捕获异常，catch子句输出提示信息，询问是否重新输出并执行try语句
+
+```c++
+int main(void)
+{
+    int a, b;
+    cout << "Input two integers: ";
+    while (cin >> a >> b) {
+        try {
+            if (b == 0) throw runtime_error("divisor is 0");
+            cout << static_cast<double>(a) / b << endl;
+            cout << "Input two integers: ";
+        }
+        catch (runtime_error err) {
+            cout << err.what() ;
+            cout << "\nTry Again? Enter y or n:" << endl;
+            char c;
+            cin >> c;
+            if (!cin || c == 'n')
+                break;
+            else
+                cout << "Input two integers: ";
+        }
+    }
+
+    return 0;
+}
+```
+
