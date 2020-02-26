@@ -470,3 +470,200 @@ int factorial(int val){
 
 如果使用val--的话，是后置递减，那就会先调用factorial(val)*val再执行减一，但是根据循环，factorial()的参数将会一直是最初的val.
 
+### 6.36&6.37
+
+编写一个函数得声明，使其返回数组嘚引用并且该数组包含10个string对象，不要使用尾置返回类型、decltype或者类型别名；再分别使用类型别名、尾置返回类型、decltype改写声明
+
+```c++
+string (&func(string (&x)[10])[10];
+//类型别名
+using arrS=string[10];
+arrS& func(arrS& x); 
+//尾置
+auto func2(arrS& x) -> string(&)[10]; 
+//decltype
+string arrS[10];
+decltype(arrS)& func3(ArrT& arr);        
+```
+
+### 6.38
+
+修改arrPtr函数，使其返回数组的引用
+
+```c++
+int odd[]={1,3,5,7,9};
+int even[]={0,2,4,6,8};
+//返回一个指针，该指针指向含有5个整数的数组
+decltype(odd) *arrPtr(int i)
+{
+	return (i%2)? &odd:&even;//返回一个指向数组的指针
+}
+//改成返回数组的引用
+decltype(odd)& arrPtr(int i)
+{
+	return {i%2}? odd:even;
+}
+```
+
+### 6.39
+
+说明每组声明中第二条语句是何含义，是否非法。
+
+```c++
+//a
+int calc(int,int);
+int calc(const int,const int);//非法，拥有顶层const的形参无法和没有顶层const的形参区分
+//b
+int get();
+double get();//非法，形参相同但是返回值类型不同
+//c
+int *reset(int *);
+double *reset(double *);//合法
+```
+
+### 6.40
+
+下列哪个声明是错误的，为什么
+
+```c++
+//a
+int ff(int a,int b=0,int c=0);//合法
+//b
+char *init(int ht=24,int wd,char bckgrnd);//非法，含默认的形参后面的也必须是默认形参
+```
+
+### 6.41
+
+哪个调用是非法的，理由，哪个不符合初衷，理由
+
+```c++
+char *init(int ht,int wd=80,char bckgrnd=' ');
+init();//非法
+init(24,10);//合法
+init(14,'*');//不符合初衷
+```
+
+### 6.42
+
+给make_plural函数的第二个形参符与默认实参's'，利用新版本函数输出单词success和failure的单数和复数形式
+
+```c++
+#include<iostream>
+#include<string>
+
+std::string make_plural(size_t ctr,const std::string& word,const std::string& ending="s"){
+    return (ctr>1)?word+ending:word;
+}
+
+int main(){
+    std::cout << "singual: " << make_plural(1, "success", "es") << " "
+         << make_plural(1, "failure") << std::endl;
+    std::cout << "plural : " << make_plural(2, "success", "es") << " "
+         << make_plural(2, "failure") << std::endl;
+}
+```
+
+### 6.43
+
+均应放在头文件中，a是内联函数的声明和定义，b是普通函数的声明
+
+### 6.44
+
+将isShorter函数改写成内联函数
+
+```c++
+inline bool isShorter(const std::string& str1,const std::string& str2){
+    return str1.size()>str2.size();
+}
+int main(){
+    std::cout << isShorter("name","location")<< std::endl;
+    return 0; 
+}
+```
+
+### 6.46
+
+不能，因为参数std::string不是字面值
+
+### 6.49
+
+候选函数：函数匹配的第一步是选定调用对应的重载函数集，集合中的函数称为候选函数。两个特征，一与被调用的函数同名，二是其声明在调用点可见。
+
+可行函数：考察实参，从候选函数中选择处能被实参调用的函数
+
+### 6.50
+
+非法，f(int)，f(int,int)，f(double,double)
+
+### 6.51
+
+```c++
+void f(int){
+    std::cout<<"f(int)"<<std::endl;
+}
+void f(int,int){
+    std::cout<<"f(int,int)"<<std::endl;
+}
+void f(double,double){
+    std::cout<<"f(double,double)"<<std::endl;
+}
+int main(){
+    f(42);
+    f(42,0);
+    f(2.56,3.14);
+    return 0; 
+}
+```
+
+### 6.52
+
+第一个是类型提升，第二个是参数类型转换
+
+###6.53
+
+(a)对于第二句，接收常量整型数据的引用，(b)接收常量字符的指针，(c)非法，均接收指向字符的指针类型
+
+### 6.54
+
+编写函数的声明，令其接受两个int形参并且返回类型也是int，然后声明一个vector对象，令元素是指向该函数的指针
+
+```c++
+int func(int a, int b);
+
+using pFunc1 = decltype(func) *;
+typedef decltype(func) *pFunc2;
+using pFunc3 = int (*)(int a, int b);
+using pFunc4 = int(int a, int b);
+typedef int(*pFunc5)(int a, int b);
+using pFunc6 = decltype(func);
+
+std::vector<pFunc1> vec1;
+std::vector<pFunc2> vec2;
+std::vector<pFunc3> vec3;
+std::vector<pFunc4*> vec4;
+std::vector<pFunc5> vec5;
+std::vector<pFunc6*> vec6;
+```
+
+### 6.55
+
+四个函数加减乘除
+
+```c++
+int add(int a, int b) { return a + b; }
+int subtract(int a, int b) { return a - b; }
+int multiply(int a, int b) { return a * b; }
+int divide(int a, int b) { return b != 0 ? a / b : 0; }
+```
+
+### 6.56
+
+调用vector对象中的每个元素并输出结果
+
+```c++
+std::vector<decltype(func) *> vec={add,subtract,multiply,divide};
+for(auto i:vec){
+	std::cout<<i(2,3)<<std::endl;
+}
+```
+
