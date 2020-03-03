@@ -289,3 +289,61 @@ int main() {
 }
 ```
 
+### 2.42
+
+根据自己的理解重写一个Sales_data.h头文件
+
+```c++
+#include<iostream>
+#include<string>
+
+struct salesdata
+{
+    /* data */
+    std::string bookNo;
+    unsigned units_sold=0;
+    double revenue=0.0;
+
+    void CalcRevenue(double price);
+    double CalcAveragePrice();
+    void SetData(salesdata data);
+    void AddData(salesdata data);
+    void print();
+};
+
+void salesdata::CalcRevenue(double price){
+    revenue=units_sold*price;
+}
+
+double salesdata::CalcAveragePrice(){
+    if(units_sold!=0)
+        return revenue/units_sold;
+    else
+        return 0.0;    
+}
+
+void salesdata::SetData(salesdata data){
+    bookNo= data.bookNo;
+    units_sold=data.units_sold;
+    revenue=data.revenue;
+}
+
+void salesdata::AddData(salesdata data){
+    if(bookNo!=data.bookNo)
+        return ;
+    else{
+        units_sold+=data.units_sold;
+        revenue+=data.revenue;
+    }
+}
+
+void salesdata::print(){
+    std::cout<<bookNo<<" "<<units_sold<<" "<<revenue<<" ";
+    double averagePrice=CalcAveragePrice();
+    if(averagePrice!=0)
+        std::cout<<averagePrice<<std::endl;
+    else
+        std::cout<<"no sales"<<std::endl;   
+}
+```
+
